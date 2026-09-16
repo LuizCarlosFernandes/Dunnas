@@ -1,0 +1,22 @@
+<header class="topbar">
+    <div>
+        <p class="eyebrow">${currentUserRoleLabel}</p>
+        <h1>${pageTitle}</h1>
+        <p class="topbar-meta">Fluxo visual unificado para operacao, acompanhamento e atendimento.</p>
+    </div>
+    <div class="topbar-actions">
+        <button type="button" class="icon-button mobile-nav-button" data-sidebar-toggle aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="profile-chip">
+            <strong>${currentUserEmail}</strong>
+            <span>${currentUserRoleLabel}</span>
+        </div>
+        <form method="post" action="${ctx}/logout" class="inline-form">
+            <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+            <button type="submit" class="btn btn-secondary">Sair</button>
+        </form>
+    </div>
+</header>

@@ -1,0 +1,5 @@
+<script src="${ctx}/js/core.js"></script>
+<script src="${ctx}/js/alerts.js"></script>
+<script src="${ctx}/js/forms.js"></script>
+<script src="${ctx}/js/tables.js"></script>
+<script src="${ctx}/js/layout.js"></script>

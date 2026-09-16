@@ -1,0 +1,36 @@
+<aside class="sidebar" data-sidebar>
+    <div class="brand-block">
+        <span class="brand-chip">Central de Operacoes</span>
+        <a href="${ctx}${currentUserHome}" class="brand-mark">${appName}</a>
+        <p>Operacao do condominio em um unico fluxo.</p>
+    </div>
+
+    <nav class="nav-list">
+        <a href="${ctx}${currentUserHome}" class="nav-link">Inicio</a>
+
+        <c:if test="${isAdministrador}">
+            <a href="${ctx}/admin/blocos" class="nav-link">Blocos</a>
+            <a href="${ctx}/admin/usuarios" class="nav-link">Usuarios</a>
+            <a href="${ctx}/admin/vinculos-morador" class="nav-link">Vincular Morador</a>
+            <a href="${ctx}/admin/escopo-colaborador" class="nav-link">Escopo Colaborador</a>
+            <a href="${ctx}/admin/tipos-chamado" class="nav-link">Tipos de Chamado</a>
+            <a href="${ctx}/admin/status-chamado" class="nav-link">Status</a>
+            <a href="${ctx}/admin/chamados" class="nav-link">Chamados</a>
+        </c:if>
+
+        <c:if test="${isMorador}">
+            <a href="${ctx}/morador/chamados" class="nav-link">Meus Chamados</a>
+            <a href="${ctx}/morador/chamados/novo" class="nav-link">Abrir Chamado</a>
+        </c:if>
+
+        <c:if test="${isColaborador}">
+            <a href="${ctx}/colaborador/chamados" class="nav-link">Fila de Atendimento</a>
+        </c:if>
+    </nav>
+
+    <div class="sidebar-footer">
+        <span>Perfil ativo</span>
+        <strong>${currentUserRoleLabel}</strong>
+    </div>
+</aside>
+<button type="button" class="sidebar-backdrop" data-sidebar-backdrop aria-label="Fechar menu"></button>

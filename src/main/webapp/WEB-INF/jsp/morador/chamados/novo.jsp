@@ -1,0 +1,66 @@
+<%@ include file="/WEB-INF/jsp/fragments/taglibs.jspf" %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%@ include file="/WEB-INF/jsp/fragments/head.jspf" %>
+<body data-page="morador-novo-chamado">
+<div class="app-shell">
+    <%@ include file="/WEB-INF/jsp/fragments/sidebar.jspf" %>
+    <div class="app-main">
+        <%@ include file="/WEB-INF/jsp/fragments/topbar.jspf" %>
+        <main class="page-content narrow-content">
+            <%@ include file="/WEB-INF/jsp/fragments/alerts.jspf" %>
+
+            <section class="card">
+                <div class="section-header">
+                    <div>
+                        <p class="eyebrow">Registro de ocorrencia</p>
+                        <h2>Abrir chamado</h2>
+                    </div>
+                </div>
+
+                <form method="post" action="${ctx}/morador/chamados" enctype="multipart/form-data" class="stack-form">
+                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+                    <label class="field">
+                        <span>Unidade</span>
+                        <select name="unidadeId" required>
+                            <option value="">Selecione uma unidade</option>
+                            <c:forEach items="${unidades}" var="unidade">
+                                <option value="${unidade.id}" ${abrirChamadoForm.unidadeId eq unidade.id ? 'selected' : ''}>
+                                    ${unidade.identificacao} - ${unidade.blocoIdentificacao}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Tipo do chamado</span>
+                        <select name="tipoChamadoId" required>
+                            <option value="">Selecione um tipo</option>
+                            <c:forEach items="${tiposChamado}" var="tipo">
+                                <option value="${tipo.id}" ${abrirChamadoForm.tipoChamadoId eq tipo.id ? 'selected' : ''}>
+                                    ${tipo.titulo} - SLA ${tipo.prazoHoras}h
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </label>
+                    <label class="field">
+                        <span>Descricao</span>
+                        <textarea name="descricao" rows="6" maxlength="255" required data-character-count>${abrirChamadoForm.descricao}</textarea>
+                        <small class="field-hint" data-character-output>0 caracteres</small>
+                    </label>
+                    <label class="field">
+                        <span>Anexo inicial</span>
+                        <input type="file" name="arquivo">
+                        <small class="field-hint">Opcional. Se enviado, sera anexado logo na abertura do chamado. Tamanho maximo: 5 MB.</small>
+                    </label>
+                    <div class="button-row">
+                        <button type="submit" class="btn btn-primary">Registrar chamado</button>
+                        <a href="${ctx}/morador/chamados" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+</div>
+<%@ include file="/WEB-INF/jsp/fragments/scripts.jspf" %>
+</body>
+</html>
