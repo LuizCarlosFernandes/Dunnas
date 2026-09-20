@@ -1,4 +1,4 @@
-package br.com.dunnastecnologia.chamados.infrastructure.controller.web;
+package br.com.dunnastecnologia.chamados.integration.controller.web;
 
 import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
 import br.com.dunnastecnologia.chamados.application.UserCase.AnexoChamadoUseCases;
@@ -10,6 +10,8 @@ import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.Morador;
 import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
+import br.com.dunnastecnologia.chamados.infrastructure.controller.web.AdminWebController;
+import br.com.dunnastecnologia.chamados.infrastructure.controller.web.WebControllerSupport;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.AdminChamadoApiController;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.BlocoApiController;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.ColaboradorTipoChamadoApiController;
@@ -17,6 +19,7 @@ import br.com.dunnastecnologia.chamados.infrastructure.controller.api.MoradorUni
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.StatusChamadoApiController;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.TipoChamadoApiController;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.api.UsuarioApiController;
+import br.com.dunnastecnologia.chamados.infrastructure.security.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -64,6 +67,9 @@ class AdminWebControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private AdminUseCases adminUseCases;
