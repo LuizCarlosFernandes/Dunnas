@@ -106,7 +106,7 @@ class MoradorWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/morador/chamados")
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                                 .param("statusId", statusId.toString())
                                 .param("unidadeId", unidadeId.toString())
                                 .param("tipoChamadoId", tipoChamadoId.toString())
@@ -149,7 +149,7 @@ class MoradorWebControllerIntegrationTest {
 
         mockMvc.perform(
                         multipart("/morador/chamados")
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                                 .param("unidadeId", unidadeId.toString())
                                 .param("tipoChamadoId", tipoChamadoId.toString())
                                 .param("descricao", "Vazamento na cozinha")
@@ -200,7 +200,7 @@ class MoradorWebControllerIntegrationTest {
         mockMvc.perform(
                         multipart("/morador/chamados")
                                 .file(arquivo)
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                                 .param("unidadeId", unidadeId.toString())
                                 .param("tipoChamadoId", tipoChamadoId.toString())
                                 .param("descricao", "Porta quebrada")
@@ -236,7 +236,7 @@ class MoradorWebControllerIntegrationTest {
         mockMvc.perform(
                         multipart("/morador/chamados/{chamadoId}/anexos", chamadoId)
                                 .file(arquivo)
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/morador/chamados/" + chamadoId));
@@ -284,7 +284,7 @@ class MoradorWebControllerIntegrationTest {
         mockMvc.perform(
                         multipart("/morador/chamados/{chamadoId}/comentarios", chamadoId)
                                 .file(arquivo)
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                                 .param("mensagem", "Segue comprovante")
                 )
                 .andExpect(status().is3xxRedirection())
@@ -311,7 +311,7 @@ class MoradorWebControllerIntegrationTest {
 
         mockMvc.perform(
                         patch("/morador/chamados/{chamadoId}/reabrir", chamadoId)
-                                .with(authentication(WebTestAuthenticationFactory.morador()))
+                                .principal(WebTestAuthenticationFactory.morador())
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/morador/chamados/" + chamadoId));

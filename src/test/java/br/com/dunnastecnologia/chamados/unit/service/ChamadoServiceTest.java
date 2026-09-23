@@ -1,4 +1,4 @@
-package br.com.dunnastecnologia.chamados.infrastructure.service;
+package br.com.dunnastecnologia.chamados.unit.service;
 
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
@@ -12,6 +12,7 @@ import br.com.dunnastecnologia.chamados.infrastructure.repository.MoradorReposit
 import br.com.dunnastecnologia.chamados.infrastructure.repository.StatusChamadoRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.TipoChamadoRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
+import br.com.dunnastecnologia.chamados.infrastructure.service.ChamadoService;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.domain.validation.ValidationLimits;
 import org.junit.jupiter.api.Test;

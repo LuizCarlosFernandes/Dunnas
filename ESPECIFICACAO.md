@@ -7,3 +7,11 @@
   - O que foi encontrado: ao rodar ./mvnw teste na base recebida, 22 de 56 testes falhavam antes mesmo de qualquer asserção.
   - Decisão: corrigido adicionando @MockitoBean private JwtService jwtService; 
   - Porque corrigir: um baseline de testes quebrados antes de qualuqer mudança minha impediria diferenciar uma regressão introduzida pela funcionalidade de reservas de uma falha pré-existente
+
+- 3- Alteração no pom.xml
+  - Teste usava o h2Database, porém no pom.xml apenas era declarava o postgreSQL, usado em produção.
+
+- 4- .with(authentication()) não funcionava com addFilters = false
+  - O que foi encontrado: SecurityMockMvcRequestPostProcessors.authentication(...) só grava o SecurityContext na sessão mock, quem promove isso para o SecurityContextHolder durante a requisição é um filtro do Spring Security. Como todos esses testes usam @AutoConfigureMockMvc(addFilters = false), esse filtro nunca roda, e o parâmetro Authentication authentication dos controllers chega vazio/anônimo.
+  - Decisão: Troca por .principal(...), que grava diretamente na requisição mock, sem o uso de filtros.
+  - Porque corrigir: Similar ao achado 2, para poder ter uma baseline de testes já rodando de forma Ok antes de começar a adicionar novas implementações ao código

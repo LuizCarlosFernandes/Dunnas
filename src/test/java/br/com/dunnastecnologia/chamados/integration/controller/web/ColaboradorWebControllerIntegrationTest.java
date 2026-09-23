@@ -84,7 +84,7 @@ class ColaboradorWebControllerIntegrationTest {
         when(colaboradorUseCases.buscarChamados(colaborador, statusAtrasadoId, null, null, null, PageRequest.of(0, 1)))
                 .thenReturn(new PageResult<>(List.of(), 2, 2, 0, 1));
 
-        mockMvc.perform(get("/colaborador").with(authentication(colaboradorAuth)))
+        mockMvc.perform(get("/colaborador").principal(colaboradorAuth))
                 .andExpect(status().isOk())
                 .andExpect(view().name("colaborador/dashboard"))
                 .andExpect(model().attribute("totalChamadosAtrasados", 2L));
@@ -111,7 +111,7 @@ class ColaboradorWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/colaborador/chamados")
-                                .with(authentication(WebTestAuthenticationFactory.colaborador()))
+                                .principal(WebTestAuthenticationFactory.colaborador())
                                 .param("statusId", statusId.toString())
                                 .param("tipoChamadoId", tipoChamadoId.toString())
                                 .param("unidade", "A-101")
@@ -153,7 +153,7 @@ class ColaboradorWebControllerIntegrationTest {
         mockMvc.perform(
                         multipart("/colaborador/chamados/{chamadoId}/comentarios", chamadoId)
                                 .file(arquivo)
-                                .with(authentication(WebTestAuthenticationFactory.colaborador()))
+                                .principal(WebTestAuthenticationFactory.colaborador())
                                 .param("mensagem", "Atualizacao do atendimento")
                 )
                 .andExpect(status().is3xxRedirection())
@@ -189,7 +189,7 @@ class ColaboradorWebControllerIntegrationTest {
 
         mockMvc.perform(
                         patch("/colaborador/chamados/{chamadoId}/status", chamadoId)
-                                .with(authentication(WebTestAuthenticationFactory.colaborador()))
+                                .principal(WebTestAuthenticationFactory.colaborador())
                                 .param("statusId", statusId.toString())
                 )
                 .andExpect(status().is3xxRedirection())

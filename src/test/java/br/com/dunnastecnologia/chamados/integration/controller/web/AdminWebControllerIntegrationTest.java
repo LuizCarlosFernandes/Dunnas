@@ -107,7 +107,7 @@ class AdminWebControllerIntegrationTest {
         when(adminUseCases.buscarChamados(usuario, statusAtrasadoId, null, null, PageRequest.of(0, 1)))
                 .thenReturn(new PageResult<>(List.of(), 3, 3, 0, 1));
 
-        mockMvc.perform(get("/admin").with(authentication(admin)))
+        mockMvc.perform(get("/admin").principal(admin))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/dashboard"))
                 .andExpect(model().attribute("totalChamadosAtrasados", 3L));
@@ -126,7 +126,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/admin/vinculos-morador")
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                                 .param("moradorEmail", "ana")
                                 .param("cadastradosEmail", "mar")
                                 .param("cadastradosPage", "1")
@@ -152,7 +152,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/admin/blocos")
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                                 .param("page", "2")
                                 .param("size", "15")
                 )
@@ -193,7 +193,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/admin/blocos/{blocoId}", blocoId)
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                 )
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/blocos/detalhe"))
@@ -228,7 +228,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/admin/chamados")
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                                 .param("statusId", statusId.toString())
                                 .param("moradorNome", "Ana")
                                 .param("dataAbertura", "2026-04-10")
@@ -267,7 +267,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         get("/admin/status-chamado")
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                                 .param("statusId", statusId.toString())
                 )
                 .andExpect(status().isOk())
@@ -282,7 +282,7 @@ class AdminWebControllerIntegrationTest {
 
         mockMvc.perform(
                         delete("/admin/usuarios/{usuarioId}", usuarioId)
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/usuarios"));
@@ -326,7 +326,7 @@ class AdminWebControllerIntegrationTest {
         mockMvc.perform(
                         multipart("/admin/chamados/{chamadoId}/comentarios", chamadoId)
                                 .file(arquivo)
-                                .with(authentication(WebTestAuthenticationFactory.administrador()))
+                                .principal(WebTestAuthenticationFactory.administrador())
                                 .param("mensagem", "Segue analise")
                 )
                 .andExpect(status().is3xxRedirection())

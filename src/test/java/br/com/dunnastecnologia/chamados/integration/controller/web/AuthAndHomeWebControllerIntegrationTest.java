@@ -38,7 +38,7 @@ class AuthAndHomeWebControllerIntegrationTest {
 
     @Test
     void homeDeveRedirecionarAdministradorParaPainelCorreto() throws Exception {
-        mockMvc.perform(get("/").with(authentication(WebTestAuthenticationFactory.administrador())))
+        mockMvc.perform(get("/").principal(WebTestAuthenticationFactory.administrador()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin"));
     }
