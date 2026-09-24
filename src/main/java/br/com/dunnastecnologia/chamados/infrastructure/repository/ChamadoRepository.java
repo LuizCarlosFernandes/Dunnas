@@ -21,17 +21,16 @@ public interface ChamadoRepository extends JpaRepository<Chamado, UUID> {
      */
     @Modifying
     @Query(value = """
-            update chamados c
-               set status_id = s.id
-              from status_chamado s,
-                   tipos_chamado tc
-             where lower(s.nome) = 'atrasado'
-               and tc.id = c.tipo_chamado_id
-               and c.data_finalizacao is null
-               and c.data_abertura is not null
-               and tc.prazo_horas is not null
-               and now() > c.data_abertura + (tc.prazo_horas * interval '1 hour')
-               and c.status_id <> s.id
+            update chamados
+               set status_id = (select s.id from status_chamado s where lower(s.nome) = 'atrasado')
+             where data_finalizacao is null
+               and data_abertura is not null
+               and status_id <> (select s.id from status_chamado s where lower(s.nome) = 'atrasado')
+               and tipo_chamado_id in (
+                     select tc.id from tipos_chamado tc
+                      where tc.prazo_horas is not null
+                        and now() > chamados.data_abertura + (tc.prazo_horas * INTERVAL '1' HOUR)
+                   )
             """,
             nativeQuery = true)
     int marcarChamadosAtrasados();

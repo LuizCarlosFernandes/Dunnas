@@ -135,11 +135,11 @@ public class WebControllerSupport {
     }
 
     public Map<String, Object> toTipoChamadoMap(TipoChamado tipoChamado) {
-        return Map.of(
-                "id", tipoChamado.getId(),
-                "titulo", tipoChamado.getTitulo(),
-                "prazoHoras", tipoChamado.getPrazoHoras()
-        );
+        Map<String, Object> values = new LinkedHashMap<>();
+        values.put("id", tipoChamado.getId());
+        values.put("titulo", tipoChamado.getTitulo());
+        values.put("prazoHoras", tipoChamado.getPrazoHoras());
+        return values;
     }
 
     public Map<String, Object> toStatusChamadoMap(StatusChamado statusChamado) {
