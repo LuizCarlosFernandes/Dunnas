@@ -14,6 +14,7 @@ public final class ValidationLimits {
     public static final int ANEXO_NOME_ARQUIVO_MAX_LENGTH = 255;
     public static final int ANEXO_CONTENT_TYPE_MAX_LENGTH = 255;
     public static final int AREA_COMUM_NOME_MAX_LENGTH = 255;
+    public static final int RESERVA_MOTIVO_NEGACAO_MAX_LENGTH = 255;
     public static final long ANEXO_TAMANHO_MAX_BYTES = 5L * 1024L * 1024L;
 
     private ValidationLimits() {
