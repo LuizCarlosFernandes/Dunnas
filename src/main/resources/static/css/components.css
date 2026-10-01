@@ -250,6 +250,52 @@
     background: linear-gradient(135deg, rgba(95, 108, 128, 0.08), rgba(95, 108, 128, 0.14));
     color: var(--neutral);
 }
+.status-pill.success {
+    background: linear-gradient(135deg, rgba(22, 124, 91, 0.10), rgba(22, 124, 91, 0.18));
+    color: var(--success);
+    border-color: rgba(22, 124, 91, 0.16);
+}
+.status-pill.warning {
+    background: linear-gradient(135deg, rgba(219, 162, 74, 0.16), rgba(219, 162, 74, 0.26));
+    color: #8a5a10;
+    border-color: rgba(219, 162, 74, 0.3);
+}
+.status-pill.danger {
+    background: linear-gradient(135deg, rgba(182, 65, 52, 0.10), rgba(182, 65, 52, 0.18));
+    color: var(--danger);
+    border-color: rgba(182, 65, 52, 0.16);
+}
+
+/* Reservas: bloco expansível (ex.: "Negar" com motivo) e faixas de horário ocupado */
+.inline-details summary {
+    cursor: pointer;
+    list-style: none;
+}
+.inline-details summary::-webkit-details-marker {
+    display: none;
+}
+.inline-details[open] {
+    flex-basis: 100%;
+}
+.inline-details form {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.inline-details input[type="text"] {
+    min-width: 220px;
+}
+.busy-slot {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: var(--panel-soft);
+}
 
 .detail-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));

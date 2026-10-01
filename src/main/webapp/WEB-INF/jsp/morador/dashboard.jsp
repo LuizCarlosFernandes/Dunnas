@@ -24,6 +24,14 @@
                     <strong>Abrir chamado</strong>
                     <a href="${ctx}/morador/chamados/novo" class="btn btn-primary">Registrar agora</a>
                 </article>
+                <article class="stat-card stat-card-wide">
+                    <span>Areas comuns</span>
+                    <strong>Reservar espaco</strong>
+                    <div class="button-row">
+                        <a href="${ctx}/morador/reservas/nova" class="btn btn-primary">Solicitar reserva</a>
+                        <a href="${ctx}/morador/reservas" class="btn btn-secondary">Minhas reservas</a>
+                    </div>
+                </article>
             </section>
 
             <section class="two-column-grid">

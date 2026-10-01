@@ -36,6 +36,14 @@
                     <strong>${totalChamados}</strong>
                     <a href="${ctx}/admin/chamados" class="btn btn-secondary">Abrir fila completa</a>
                 </article>
+                <article class="stat-card stat-card-wide">
+                    <span>Areas comuns e reservas</span>
+                    <strong>Gerenciar reservas</strong>
+                    <div class="button-row">
+                        <a href="${ctx}/admin/reservas" class="btn btn-primary">Reservas</a>
+                        <a href="${ctx}/admin/areas-comuns" class="btn btn-secondary">Areas comuns</a>
+                    </div>
+                </article>
             </section>
 
             <section class="card">
