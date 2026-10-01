@@ -43,3 +43,73 @@ Dois intervalos da mesma área e da mesma data conflitam quando `inicioA < fimB`
 - Intervalos apenas adjacentes (uma termina às 10:00, outra começa às 10:00) **não** conflitam.
 - Áreas diferentes nunca conflitam entre si (CA-01-14).
 - Só reservas `APROVADA` ocupam disponibilidade; `SOLICITADA` aparece como pendente; `NEGADA` e `CANCELADA` não ocupam.
+
+#### 2.3 Representação do status da reserva
+Duas opções em análise:
+
+- **Enum Java** (`SOLICITADA`, `APROVADA`, `NEGADA`, `CANCELADA`), persistido como texto. Mais simples, sem tabela/FK adicional, e combina com estados fechados e transições fixas (RN-01-14).
+- **Tabela própria**, como o `StatusChamado` existente. Segue a convenção já presente na base, que é um critério de avaliação ("consistência com as decisões já presentes").
+
+`Decidido seguir com Enum Java devido a maior simplicidade e facilidade de implementação, também por se adequar mais as regras de negócio`
+
+#### 2.4 Versionamento do banco
+
+Nova migration `V19__areas_comuns_e_reservas.sql`, sem editar `V1` a `V18`. Cria `areas_comuns` e `reservas`, com FK para `moradores` e `areas_comuns` e índice em `(area_comum_id, data)`. O banco continua criável do zero.
+
+
+#### 2.5 Desativação de área (RN-01-01)
+
+Desativação é lógica (flag `ativa`), sem exclusão. Área inativa recusa novas solicitações; reservas existentes, inclusive futuras, mantêm estado e ciclo normal, e continuam podendo ser aprovadas, negadas ou canceladas.
+
+### 3. Impacto no modelo de dados existente
+
+- Duas tabelas novas: `areas_comuns` e `reservas`.
+- Única ligação com o modelo atual: `reservas.morador_id` referencia `moradores`.
+- Nenhuma tabela, coluna ou função existente dos chamados é alterada.
+
+---
+
+### 4. Premissas assumidas
+
+- Um horário de reserva pertence a um único dia (`data`, `hora_inicio`, `hora_fim`); reservas que atravessam a meia-noite não são suportadas.
+- "Morador ativo" usa o flag `ativo` já existente em `Usuario` (soft delete da migration V12).
+- Colaborador não tem acesso a nenhuma rota do fluxo.
+- Não há limite de antecedência nem de duração de reserva, pois o PDF não define.
+
+### 5. Fora do escopo
+
+Pagamento, reservas recorrentes, lista de espera, notificações, 
+calendários externos, arrastar e soltar, autorização de visitantes (conforme PDF). 
+
+## 6. Uso de IA
+
+**Ferramenta usada:** Claude (Anthropic), como assistente.
+
+**Atividades em que foi usada:**
+- Diagnóstico das falhas da suíte existente a partir dos logs de execução.
+- Comparação de estratégias de concorrência.
+- Esqueleto inicial de entidades, repositórios e service.
+- Implementação da suite de teste
+
+**Sugestões aceitas, modificadas ou rejeitadas:** 
+- Inclusão do H2 para suite de testes - aceita
+- Troca para .principal() - aceita
+- opcao de exclusion constraint por depender de Postgresql
+
+**Como o conteúdo foi validado:** 
+- execução da suite completa para cada inclusão ou alteração de código
+- leitura completa do código gerado
+- avaliação manual se o código gerado faz sentido e se deve ser mantido no final da implementação
+
+
+**Decisões não delegadas à IA:**  
+- escolha da estratégia de concorrência utilizada
+- modelagem dos status
+- regras de permissão
+- escopo final do projeto
+- critérios de aceite 
+
+**Interações relevantes (3 a 5, sem dados sensíveis):** `[resumir de 3 a 5 conversas: o que foi pedido, o que a IA respondeu, o que você aceitou ou mudou. Não incluir o histórico integral nem segredos.]`
+- 1: Ao seguir o esqueleto de implementação inicial do projeto fornecido pela ia, acabou por causar um grande retrabalho na implementação do ReservaService, onde tive que refatorar o arquivo inteiro para seguir os padrões de utilização de use cases.
+- 2: Ajuda inicial para correção da suite de testes, apontando possíveis erros de funcionamento e indicando formas de corrigir.
+- 3: Correção de erros de grafia simples, causados pela pressa devido ao curto prazo, que acabavam por causar erros criticos no funcionamento do projeto.
