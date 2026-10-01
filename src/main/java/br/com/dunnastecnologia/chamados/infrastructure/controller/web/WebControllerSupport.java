@@ -2,13 +2,7 @@ package br.com.dunnastecnologia.chamados.infrastructure.controller.web;
 
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
-import br.com.dunnastecnologia.chamados.domain.model.Bloco;
-import br.com.dunnastecnologia.chamados.domain.model.Chamado;
-import br.com.dunnastecnologia.chamados.domain.model.Comentario;
-import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
-import br.com.dunnastecnologia.chamados.domain.model.TipoChamado;
-import br.com.dunnastecnologia.chamados.domain.model.Unidade;
-import br.com.dunnastecnologia.chamados.domain.model.Usuario;
+import br.com.dunnastecnologia.chamados.domain.model.*;
 import br.com.dunnastecnologia.chamados.infrastructure.exception.UnauthorizedOperationException;
 import br.com.dunnastecnologia.chamados.infrastructure.security.adapter.UserDetailsImpl;
 import org.springframework.http.ContentDisposition;
@@ -22,11 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -36,6 +26,9 @@ public class WebControllerSupport {
     private static final int DEFAULT_SIZE = 10;
     private static final int MAX_SIZE = 100;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public AuthenticatedUser authenticatedUser(Authentication authentication) {
         if (authentication == null
@@ -220,6 +213,45 @@ public class WebControllerSupport {
         return values;
     }
 
+    public Map<String, Object> toAreaComumMap(AreaComum area){
+        Map<String, Object> values = new LinkedHashMap<>();
+        values.put("id", area.getId());
+        values.put("nome",area.getNome());
+        values.put("ativa", area.getAtiva());
+        return values;
+    }
+
+    public Map<String, Object> toReservaMap(Reserva reserva){
+        Map<String, Object> values = new HashMap<>();
+        values.put("id", reserva.getId());
+        values.put("area", toAreaComumMap(reserva.getArea()));
+        values.put("moradorNome", reserva.getMorador().getNome());
+        values.put("data", reserva.getData());
+        values.put("horaInicio", reserva.getHoraInicio());
+        values.put("horaFim", reserva.getHoraFim());
+        values.put("status", reserva.getStatus());
+        values.put("statusCodigo", reserva.getStatus() == null? "" : reserva.getStatus().name());
+        values.put("statusLabel", reservaStatusLabel(reserva.getStatus()));
+        values.put("motivoNegacao", reserva.getMotivoNegacao());
+
+
+        //Campos já formatados para as telas
+        values.put("dataFormatada", reserva.getData() == null ? null : DATE_FORMATTER.format(reserva.getData()));
+        values.put("horaInicioFormatada", reserva.getHoraInicio() == null ? null : TIME_FORMATTER.format(reserva.getHoraInicio()));
+        values.put("horaFimFormatada", reserva.getHoraFim() == null ? null : TIME_FORMATTER.format(reserva.getHoraFim()));
+        values.put("dataCriacaoFormatada", formatDateTime(reserva.getDataCriacao()));
+        values.put("dataCriacao", formatDateTime(reserva.getDataCriacao()));
+
+        //RN-01-11 / RN-01-12 / RN-01-14 - Só SOLICITADA/APROVADA e antes do inicio podem ser canceladas
+        boolean statusCancelavel = reserva.getStatus() == StatusReserva.SOLICITADA
+                || reserva.getStatus() == StatusReserva.APROVADA;
+        boolean antesDoInicio = reserva.getData() != null
+                && reserva.getHoraInicio() != null
+                && LocalDateTime.of(reserva.getData(), reserva.getHoraInicio()).isAfter(LocalDateTime.now());
+        values.put("cancelavel", statusCancelavel && antesDoInicio);
+        return values;
+    }
+
     public UploadedFileData optionalUploadedFile(MultipartFile arquivo, String errorMessage) {
         if (arquivo == null || arquivo.isEmpty()) {
             return null;
@@ -257,6 +289,18 @@ public class WebControllerSupport {
                 .contentType(mediaType)
                 .contentLength(tamanhoBytes)
                 .body(conteudo);
+    }
+
+    private String reservaStatusLabel(StatusReserva status){
+        if (status == null){
+            return "";
+        }
+        return switch(status){
+            case SOLICITADA -> "Solicitada";
+            case APROVADA -> "Aprovada";
+            case NEGADA -> "Negada";
+            case CANCELADA -> "Cancelada";
+        };
     }
 
     private String formatDateTime(LocalDateTime value) {
