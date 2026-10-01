@@ -3,6 +3,8 @@ package br.com.dunnastecnologia.chamados.infrastructure.repository;
 import br.com.dunnastecnologia.chamados.domain.model.AreaComum;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,9 @@ import java.util.UUID;
 
 @Repository
 public interface AreaComumRepository extends JpaRepository<AreaComum, UUID>{
+    //RF-02 - área que o morador pode escolher para solicitar reserva.
+    Page<AreaComum> findByAtivaTrue(Pageable pageable);
+
     /**
      * Trava a linha da área até o fim da transação atual
      * Só deve ser chamado dentro de um métod @Transacional que decide uma aprovação

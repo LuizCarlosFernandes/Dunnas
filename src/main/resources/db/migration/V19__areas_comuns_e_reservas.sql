@@ -2,7 +2,7 @@ create table areas_comuns(
     id uuid not null primary key,
     nome varchar(255) not null,
     ativa boolean not null default true
-)
+);
 
 create table reservas(
     id uuid not null primary key,
@@ -15,6 +15,6 @@ create table reservas(
     motivo_negacao varchar(500),
     data_criacao timestamp(6),
     data_decisao timestamp(6)
-)
+);
 
 create index idx_reservas_area_data on reservas (area_comum_id, data);
